@@ -5,6 +5,8 @@ import pinoHttp from "pino-http";
 import helmet from "helmet";
 import userRouter from "./api/user/userRouter";
 import pool from "./db/db";
+import { authMiddleware } from "./common/middlewares/authMiddleware";
+import authRouter from "./api/auth/authRouter";
 
 const logger = pino({
   name: "app-server",
@@ -34,6 +36,9 @@ app.use(cors()); //cors({ origin: "http://localhost:3000" }))
 app.use(httpLogger);
 
 app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);
+
+// app.use(authMiddleware);
 
 app.use(httpLogger);
 

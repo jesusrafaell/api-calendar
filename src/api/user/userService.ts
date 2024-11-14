@@ -1,6 +1,5 @@
 import { UserRepository } from "./userRepository";
 import { IUser } from "./userModel";
-import { log } from "console";
 
 export class UserService {
   private userRepository: UserRepository;
@@ -9,7 +8,7 @@ export class UserService {
     this.userRepository = new UserRepository();
   }
 
-  public getUsers = (): Promise<IUser[]> => {
+  public getUsers = async (): Promise<IUser[]> => {
     return this.userRepository.getAllUsers();
   };
 
@@ -17,11 +16,11 @@ export class UserService {
     return this.userRepository.createUser(user);
   };
 
-  async findById(id: string): Promise<IUser | null> {
+  public findById = async (id: string): Promise<IUser | null> => {
     return this.userRepository.findById(id);
-  }
+  };
 
-  async findByEmail(email: string): Promise<IUser | null> {
+  public findByEmail = async (email: string): Promise<IUser | null> => {
     return this.userRepository.findByEmail(email);
-  }
+  };
 }
