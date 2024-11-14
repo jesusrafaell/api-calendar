@@ -41,4 +41,20 @@ export class UserController {
       res.status(500).json({ error: "Error al obtener usuario" });
     }
   };
+
+  public getUserDataByToken = async (req: Request, res: Response) => {
+    try {
+      const userId = req.user.id;
+
+      const user = await this.userService.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
 }

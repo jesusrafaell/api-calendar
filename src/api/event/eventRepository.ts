@@ -6,7 +6,7 @@ export class EventRepository {
     const { userId, title, description, date, time } = event;
     const result = await pool.query(
       `INSERT INTO events (user_id, title, description, date, time)
-       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+       VALUES ($1, $2, $3, $4, $5) RETURNING id, user_id AS "userId", title, description, date, time`,
       [userId, title, description, date, time]
     );
     return result.rows[0];
@@ -18,7 +18,14 @@ export class EventRepository {
     endDate?: string
   ) {
     let query = `
-      SELECT * FROM events
+      SELECT
+        id,
+        user_id AS "userId",
+        title,
+        description,
+        date,
+        time
+      FROM events
       WHERE user_id = $1
     `;
     const params: any[] = [userId];
@@ -43,7 +50,7 @@ export class EventRepository {
     const { id, title, description, date, time } = event;
     const result = await pool.query(
       `UPDATE events SET title = $1, description = $2, date = $3, time = $4
-       WHERE id = $5 RETURNING *`,
+       WHERE id = $5 RETURNING id, user_id AS "userId", title, description, date, time`,
       [title, description, date, time, id]
     );
     return result.rows[0];

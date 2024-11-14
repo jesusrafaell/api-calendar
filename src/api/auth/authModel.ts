@@ -5,15 +5,15 @@ export interface ILogin {
 
 export interface ILoginResponse {
   id: string;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   token: string;
 }
 
 export interface IRegister {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }

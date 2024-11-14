@@ -50,9 +50,9 @@ export class AuthService {
 
   public async register(data: IRegister): Promise<any> {
     try {
-      const { first_name, last_name, email, password } = data;
+      const { firstName, lastName, email, password } = data;
 
-      if (!first_name || !last_name || !email || !password) {
+      if (!firstName || !lastName || !email || !password) {
         throw new Error("All fields are required");
       }
 
@@ -73,8 +73,8 @@ export class AuthService {
 
       const newUser = await this.userRepository.createUser({
         id: "",
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         email,
         password: hashedPassword,
       });
