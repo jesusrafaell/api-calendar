@@ -8,19 +8,19 @@ export class UserService {
     this.userRepository = new UserRepository();
   }
 
-  public getUsers = async (): Promise<IUser[]> => {
+  public async getUsers(): Promise<IUser[]> {
     return this.userRepository.getAllUsers();
-  };
+  }
 
-  public addUser = async (user: IUser): Promise<IUser> => {
+  public async addUser(user: IUser): Promise<IUser> {
     return this.userRepository.createUser(user);
-  };
+  }
 
-  public findById = async (id: string): Promise<IUser | null> => {
+  public async findById(id: string): Promise<IUser | null> {
     return this.userRepository.findById(id);
-  };
+  }
 
-  public findByEmail = async (email: string): Promise<IUser | null> => {
+  public async findByEmail(email: string): Promise<IUser | null> {
     return this.userRepository.findByEmail(email);
-  };
+  }
 }

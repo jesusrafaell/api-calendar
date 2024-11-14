@@ -4,12 +4,6 @@ import { IToken } from "../../api/auth/authModel";
 
 const secret = process.env.JWT_SECRET!;
 
-declare module "express-serve-static-core" {
-  interface Request {
-    user?: IToken;
-  }
-}
-
 export const authMiddleware = (
   req: Request,
   res: Response,

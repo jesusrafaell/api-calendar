@@ -10,7 +10,7 @@ export class AuthService {
     this.userRepository = new UserRepository();
   }
 
-  public login = async (payload: ILogin): Promise<ILoginResponse> => {
+  public async login(payload: ILogin): Promise<ILoginResponse> {
     try {
       const email = payload.email.trim();
       const password = payload.password.trim();
@@ -37,7 +37,7 @@ export class AuthService {
     } catch (error) {
       throw error;
     }
-  };
+  }
 
   private validateEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -49,35 +49,39 @@ export class AuthService {
   }
 
   public async register(data: IRegister): Promise<any> {
-    const { first_name, last_name, email, password } = data;
+    try {
+      const { first_name, last_name, email, password } = data;
 
-    if (!first_name || !last_name || !email || !password) {
-      throw new Error("All fields are required");
+      if (!first_name || !last_name || !email || !password) {
+        throw new Error("All fields are required");
+      }
+
+      if (!this.validateEmail(email)) {
+        throw new Error("Invalid email format");
+      }
+
+      if (!this.validatePassword(password)) {
+        throw new Error("Password must be at least 8 characters long");
+      }
+
+      const existingUser = await this.userRepository.findByEmail(email);
+      if (existingUser) {
+        throw new Error("Email is already in use");
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const newUser = await this.userRepository.createUser({
+        id: "",
+        first_name,
+        last_name,
+        email,
+        password: hashedPassword,
+      });
+
+      return newUser;
+    } catch (err) {
+      throw err;
     }
-
-    if (!this.validateEmail(email)) {
-      throw new Error("Invalid email format");
-    }
-
-    if (!this.validatePassword(password)) {
-      throw new Error("Password must be at least 8 characters long");
-    }
-
-    const existingUser = await this.userRepository.findByEmail(email);
-    if (existingUser) {
-      throw new Error("Email is already in use");
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = await this.userRepository.createUser({
-      id: "",
-      first_name,
-      last_name,
-      email,
-      password: hashedPassword,
-    });
-
-    return newUser;
   }
 }

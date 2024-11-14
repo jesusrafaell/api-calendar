@@ -4,9 +4,8 @@ import pino from "pino";
 import pinoHttp from "pino-http";
 import helmet from "helmet";
 import userRouter from "./api/user/userRouter";
-import pool from "./db/db";
-import { authMiddleware } from "./common/middlewares/authMiddleware";
 import authRouter from "./api/auth/authRouter";
+import eventRouter from "./api/event/eventRouter";
 
 const logger = pino({
   name: "app-server",
@@ -20,14 +19,6 @@ const app: Express = express();
 
 const httpLogger = pinoHttp({ logger });
 
-pool
-  .connect()
-  .then(() => logger.info("✅ Conexión a PostgreSQL establecida"))
-  .catch((error) => {
-    logger.error("❌ Error al conectar a PostgreSQL:", error);
-    process.exit(1);
-  });
-
 // Middlewares
 app.use(helmet());
 app.use(express.json());
@@ -37,8 +28,7 @@ app.use(httpLogger);
 
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
-
-// app.use(authMiddleware);
+app.use("/api/events", eventRouter);
 
 app.use(httpLogger);
 
